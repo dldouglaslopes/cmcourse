@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.douglas.cursomc.domain.Address;
 import com.douglas.cursomc.domain.Category;
 import com.douglas.cursomc.domain.City;
+import com.douglas.cursomc.domain.Client;
 import com.douglas.cursomc.domain.Product;
 import com.douglas.cursomc.domain.State;
+import com.douglas.cursomc.domain.enums.TypeClient;
+import com.douglas.cursomc.repositories.AddressRepository;
 import com.douglas.cursomc.repositories.CategoryRepository;
 import com.douglas.cursomc.repositories.CityRepository;
+import com.douglas.cursomc.repositories.ClientRepository;
 import com.douglas.cursomc.repositories.ProductRepository;
 import com.douglas.cursomc.repositories.StateRepository;
 
@@ -27,6 +32,10 @@ public class CursomcApplication implements CommandLineRunner{
 	private StateRepository stateRepository;
 	@Autowired
 	private CityRepository cityRepository;
+	@Autowired
+	private AddressRepository addressRepository;
+	@Autowired
+	private ClientRepository clientRepository;	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -63,5 +72,16 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		stateRepository.saveAll(Arrays.asList(stateA, stateB));
 		cityRepository.saveAll(Arrays.asList(cityA, cityB, cityC));
+		
+		Client clientA = new Client(null, "Maria Silva", "maria@gmail.com", "325465", TypeClient.PRIVATEINDIVIDUAL);
+		clientA.getPhones().addAll(Arrays.asList("45646445", "54564566"));
+		
+		Address addressA = new Address(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", clientA, cityA);
+		Address addressB = new Address(null, "Avenida Matos", "105", "Sala 800", "Centro", "38220834", clientA, cityB);
+		
+		clientA.getAddresses().addAll(Arrays.asList(addressA, addressB));
+		
+		clientRepository.saveAll(Arrays.asList(clientA));
+		addressRepository.saveAll(Arrays.asList(addressA, addressB));
 	}
 }
