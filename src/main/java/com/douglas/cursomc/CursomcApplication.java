@@ -1,5 +1,6 @@
 package com.douglas.cursomc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,20 @@ import com.douglas.cursomc.domain.Address;
 import com.douglas.cursomc.domain.Category;
 import com.douglas.cursomc.domain.City;
 import com.douglas.cursomc.domain.Client;
+import com.douglas.cursomc.domain.Payment;
+import com.douglas.cursomc.domain.PaymentBill;
+import com.douglas.cursomc.domain.PaymentCard;
 import com.douglas.cursomc.domain.Product;
+import com.douglas.cursomc.domain.PurchaseOrder;
 import com.douglas.cursomc.domain.State;
+import com.douglas.cursomc.domain.enums.PaymentStatus;
 import com.douglas.cursomc.domain.enums.TypeClient;
 import com.douglas.cursomc.repositories.AddressRepository;
 import com.douglas.cursomc.repositories.CategoryRepository;
 import com.douglas.cursomc.repositories.CityRepository;
 import com.douglas.cursomc.repositories.ClientRepository;
+import com.douglas.cursomc.repositories.OrderRepository;
+import com.douglas.cursomc.repositories.PaymentRepository;
 import com.douglas.cursomc.repositories.ProductRepository;
 import com.douglas.cursomc.repositories.StateRepository;
 
@@ -36,6 +44,10 @@ public class CursomcApplication implements CommandLineRunner{
 	private AddressRepository addressRepository;
 	@Autowired
 	private ClientRepository clientRepository;	
+	@Autowired
+	private OrderRepository orderRepository;
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -83,5 +95,21 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		clientRepository.saveAll(Arrays.asList(clientA));
 		addressRepository.saveAll(Arrays.asList(addressA, addressB));
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		PurchaseOrder orderA = new PurchaseOrder(null, format.parse("30/09/2017 10:32"), clientA, addressA);
+		PurchaseOrder orderB = new PurchaseOrder(null, format.parse("10/10/2017 19:35"), clientA, addressB);
+		
+		Payment paymentA = new PaymentCard(null, PaymentStatus.PAID, orderA, 6);
+		orderA.setPayment(paymentA);
+		
+		Payment paymentB = new PaymentBill(null, PaymentStatus.PENDING, orderB, format.parse("20/10/2017 00:00"), null);
+		orderB.setPayment(paymentB);
+		
+		clientA.getOrders().addAll(Arrays.asList(orderA, orderB));
+		
+		orderRepository.saveAll(Arrays.asList(orderA, orderB));
+		paymentRepository.saveAll(Arrays.asList(paymentA, paymentB));
 	}
 }
