@@ -12,18 +12,20 @@ import com.douglas.cursomc.domain.Address;
 import com.douglas.cursomc.domain.Category;
 import com.douglas.cursomc.domain.City;
 import com.douglas.cursomc.domain.Client;
+import com.douglas.cursomc.domain.ItemOrder;
 import com.douglas.cursomc.domain.Payment;
 import com.douglas.cursomc.domain.PaymentBill;
 import com.douglas.cursomc.domain.PaymentCard;
 import com.douglas.cursomc.domain.Product;
 import com.douglas.cursomc.domain.PurchaseOrder;
 import com.douglas.cursomc.domain.State;
+import com.douglas.cursomc.domain.enums.AddressRepository;
 import com.douglas.cursomc.domain.enums.PaymentStatus;
 import com.douglas.cursomc.domain.enums.TypeClient;
-import com.douglas.cursomc.repositories.AddressRepository;
 import com.douglas.cursomc.repositories.CategoryRepository;
 import com.douglas.cursomc.repositories.CityRepository;
 import com.douglas.cursomc.repositories.ClientRepository;
+import com.douglas.cursomc.repositories.ItemOrderRepository;
 import com.douglas.cursomc.repositories.OrderRepository;
 import com.douglas.cursomc.repositories.PaymentRepository;
 import com.douglas.cursomc.repositories.ProductRepository;
@@ -48,6 +50,8 @@ public class CursomcApplication implements CommandLineRunner{
 	private OrderRepository orderRepository;
 	@Autowired
 	private PaymentRepository paymentRepository;
+	@Autowired
+	private ItemOrderRepository itemOrderRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -111,5 +115,18 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		orderRepository.saveAll(Arrays.asList(orderA, orderB));
 		paymentRepository.saveAll(Arrays.asList(paymentA, paymentB));
+	
+		ItemOrder itemOrderA = new ItemOrder(orderA, productA, 0.00, 1, 2000.00);
+		ItemOrder itemOrderB = new ItemOrder(orderA, productC, 0.00, 2, 80.00);
+		ItemOrder itemOrderC = new ItemOrder(orderB, productB, 100.00, 1, 800.00);
+			
+		orderA.getItemOrders().addAll(Arrays.asList(itemOrderA, itemOrderB));
+		orderB.getItemOrders().addAll(Arrays.asList(itemOrderC));
+		
+		productA.getItemOrders().addAll(Arrays.asList(itemOrderA));
+		productB.getItemOrders().addAll(Arrays.asList(itemOrderC));
+		productC.getItemOrders().addAll(Arrays.asList(itemOrderB));
+		
+		itemOrderRepository.saveAll(Arrays.asList(itemOrderA, itemOrderB, itemOrderC));
 	}
 }
