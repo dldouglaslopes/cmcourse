@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.douglas.cursomc.domain.Category;
-import com.douglas.cursomc.services.CategoryService;
+import com.douglas.cursomc.domain.PurchaseOrder;
+import com.douglas.cursomc.services.OrderService;
 
 @RestController
-@RequestMapping(value="/categories")
-public class CategoryResource {
+@RequestMapping(value="/orders")
+public class OrderResource {
 	
 	@Autowired
-	private CategoryService service;
+	private OrderService service;
 	
 	@RequestMapping(value= "/{id}" , method=RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-		Category category = service.find(id);
+		PurchaseOrder order = service.find(id);
 		
-		return ResponseEntity.ok().body(category);
+		return ResponseEntity.ok().body(order);
 	}
 }
