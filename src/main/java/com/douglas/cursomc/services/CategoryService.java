@@ -35,9 +35,8 @@ public class CategoryService {
 
 	public Category update(Category category) {
 		find(category.getId());
-		repository.save(category);
 		
-		return null;
+		return repository.save(category);		
 	}
 
 	public void delete(Integer id) {
@@ -46,7 +45,7 @@ public class CategoryService {
 		try {
 			repository.deleteById(id);			
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos.");
+			throw new DataIntegrityException("It is not possible to delete a category that has products.");
 		}
 	}
 
