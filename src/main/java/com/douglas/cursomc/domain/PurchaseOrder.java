@@ -52,6 +52,16 @@ public class PurchaseOrder implements Serializable{
 		this.addressDelivery = addressDelivery;
 	}
 
+	public double getTotalValue() {
+		double soma = 0.0;
+		
+		for (ItemOrder itemOrder : itemOrders) {
+			soma = soma + itemOrder.getSubTotal();
+		}
+		
+		return soma;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
