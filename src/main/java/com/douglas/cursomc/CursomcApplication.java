@@ -59,27 +59,48 @@ public class CursomcApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		Category categoryA = new Category(null, "Informatics");
-		Category categoryB = new Category(null, "Office");
-		Category categoryC = new Category(null, "Home");
-		Category categoryD = new Category(null, "Eletronics");
-		Category categoryE = new Category(null, "Decoration");
-		Category categoryF = new Category(null, "Home");
-		Category categoryG = new Category(null, "Perfumery");
+		Category category1 = new Category(null, "Informatics");
+		Category category2 = new Category(null, "Office");
+		Category category3 = new Category(null, "Home");
+		Category category4 = new Category(null, "Eletronics");
+		Category category5 = new Category(null, "Decoration");
+		Category category6 = new Category(null, "Home");
+		Category category7 = new Category(null, "Perfumery");
 		
-		Product productA = new Product(null, "Laptop", 2000.00);
-		Product productB = new Product(null, "Printer", 800.00);
-		Product productC = new Product(null, "Mouse", 80.00);
+		Product product1 = new Product(null, "Laptop", 2000.00);
+		Product product2 = new Product(null, "Printer", 800.00);
+		Product product3 = new Product(null, "Mouse", 80.00);
+		Product product4 = new Product(null, "Desk", 300.00);
+		Product product5 = new Product(null, "Towel", 50.00);
+		Product product6 = new Product(null, "Quilt", 200.00);
+		Product product7 = new Product(null, "TV", 1200.00);
+		Product product8 = new Product(null, "Table", 800.00);
+		Product product9 = new Product(null, "Abajour", 100.00);
+		Product product10 = new Product(null, "Comb", 180.00);
+		Product product11 = new Product(null, "Shampoo", 90.00);
 		
-		categoryA.getProducts().addAll(Arrays.asList(productA, productB, productC));
-		categoryB.getProducts().addAll(Arrays.asList(productB));
+		category1.getProducts().addAll(Arrays.asList(product1, product2, product3));
+		category2.getProducts().addAll(Arrays.asList(product4, product4));
+		category3.getProducts().addAll(Arrays.asList(product5, product6));
+		category4.getProducts().addAll(Arrays.asList(product1, product2, product3, product7));
+		category5.getProducts().addAll(Arrays.asList(product8));
+		category6.getProducts().addAll(Arrays.asList(product9, product10));
+		category7.getProducts().addAll(Arrays.asList(product11));
 		
-		productA.getCategories().addAll(Arrays.asList(categoryA));
-		productB.getCategories().addAll(Arrays.asList(categoryA, categoryB));
-		productC.getCategories().addAll(Arrays.asList(categoryA));
+		product1.getCategories().addAll(Arrays.asList(category1, category4));
+		product2.getCategories().addAll(Arrays.asList(category1, category2, category4));
+		product3.getCategories().addAll(Arrays.asList(category1, category4));
+		product4.getCategories().addAll(Arrays.asList(category2));
+		product5.getCategories().addAll(Arrays.asList(category3));
+		product6.getCategories().addAll(Arrays.asList(category3));
+		product7.getCategories().addAll(Arrays.asList(category4));
+		product8.getCategories().addAll(Arrays.asList(category5));
+		product9.getCategories().addAll(Arrays.asList(category6));
+		product10.getCategories().addAll(Arrays.asList(category6));
+		product11.getCategories().addAll(Arrays.asList(category7));
 		
-		categoryRepository.saveAll(Arrays.asList(categoryA, categoryB, categoryC, categoryD, categoryE, categoryF, categoryG));
-		productRepository.saveAll(Arrays.asList(productA, productB, productC));
+		categoryRepository.saveAll(Arrays.asList(category1, category2, category3, category4, category5, category6, category7));
+		productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5, product6, product7, product8, product9, product10, product11));
 	
 		State stateA = new State(null, "Minas Gerais");
 		State stateB = new State(null, "São Paulo");
@@ -121,16 +142,16 @@ public class CursomcApplication implements CommandLineRunner{
 		orderRepository.saveAll(Arrays.asList(orderA, orderB));
 		paymentRepository.saveAll(Arrays.asList(paymentA, paymentB));
 	
-		ItemOrder itemOrderA = new ItemOrder(orderA, productA, 0.00, 1, 2000.00);
-		ItemOrder itemOrderB = new ItemOrder(orderA, productC, 0.00, 2, 80.00);
-		ItemOrder itemOrderC = new ItemOrder(orderB, productB, 100.00, 1, 800.00);
+		ItemOrder itemOrderA = new ItemOrder(orderA, product1, 0.00, 1, 2000.00);
+		ItemOrder itemOrderB = new ItemOrder(orderA, product3, 0.00, 2, 80.00);
+		ItemOrder itemOrderC = new ItemOrder(orderB, product2, 100.00, 1, 800.00);
 			
 		orderA.getItemOrders().addAll(Arrays.asList(itemOrderA, itemOrderB));
 		orderB.getItemOrders().addAll(Arrays.asList(itemOrderC));
 		
-		productA.getItemOrders().addAll(Arrays.asList(itemOrderA));
-		productB.getItemOrders().addAll(Arrays.asList(itemOrderC));
-		productC.getItemOrders().addAll(Arrays.asList(itemOrderB));
+		product1.getItemOrders().addAll(Arrays.asList(itemOrderA));
+		product2.getItemOrders().addAll(Arrays.asList(itemOrderC));
+		product3.getItemOrders().addAll(Arrays.asList(itemOrderB));
 		
 		itemOrderRepository.saveAll(Arrays.asList(itemOrderA, itemOrderB, itemOrderC));
 	}
