@@ -3,6 +3,8 @@ package com.douglas.cursomc.services;
 import java.util.Date;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,14 +34,19 @@ public class OrderService {
 	@Autowired
 	private ItemOrderRepository itemOrderRepository;
 	
+	@Autowired
+	private ClientService clientService;
+	
 	public PurchaseOrder find (Integer id) {
 		Optional<PurchaseOrder> order = repository.findById(id);
 		
 		return order.orElseThrow(() -> new ObjectNotFoundException("Object not found! Id: " + id + ", Tipo: " + PurchaseOrder.class.getName()));		
 	}
-
+	
+	@Transactional
 	public PurchaseOrder insert(PurchaseOrder order) {
 		order.setId(null);
+		order.setClient(clientService.find(order.getClient().getId()));
 		order.setInstant(new Date());
 		order.getPayment().setStatus(PaymentStatus.PENDING);
 		order.getPayment().setOrder(order);
@@ -54,11 +61,13 @@ public class OrderService {
 		
 		for (ItemOrder itemOrder : order.getItemOrders()) {
 			itemOrder.setDiscount(0.0);
-			itemOrder.setPrice(productService.find(itemOrder.getProduct().getId()).getPrice());
+			itemOrder.setProduct(productService.find(itemOrder.getProduct().getId()));
+			itemOrder.setPrice(itemOrder.getProduct().getPrice());
 			itemOrder.setOrder(order);
 		}
 		
 		itemOrderRepository.saveAll(order.getItemOrders());
+		System.out.println(order);
 		
 		return order;
 	}

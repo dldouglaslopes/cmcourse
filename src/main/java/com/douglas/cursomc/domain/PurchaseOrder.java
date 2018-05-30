@@ -1,8 +1,11 @@
 package com.douglas.cursomc.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -133,6 +136,31 @@ public class PurchaseOrder implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+		StringBuilder builder = new StringBuilder();
+		builder.append("Order number: ");
+		builder.append(getId());
+		builder.append(", Instant: ");
+		builder.append(dateFormat.format(getInstant()));
+		builder.append(", Client: ");
+		builder.append(getClient().getName());
+		builder.append(", Status payment: ");
+		builder.append(getPayment().getStatus().getDescription());
+		builder.append("\nDetails: \n");
+		
+		for (ItemOrder itemOrder : getItemOrders()) {
+			builder.append(itemOrder.toString());
+		}
+		
+		builder.append("Total value: ");
+		builder.append(format.format(getTotalValue()));
+		
+		return builder.toString();
 	}
 	
 	
