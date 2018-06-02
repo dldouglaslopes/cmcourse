@@ -2,6 +2,7 @@ package com.douglas.cursomc.services;
 
 import java.util.Date;
 
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -15,7 +16,7 @@ import org.thymeleaf.context.Context;
 
 import com.douglas.cursomc.domain.PurchaseOrder;
 
-public abstract class AbstractEmailService implements EmailService{
+public abstract class AbstractEmailService implements EmailService {
 		
 	@Value("${default.sender}")
 	private String sender;
@@ -24,7 +25,7 @@ public abstract class AbstractEmailService implements EmailService{
 	private TemplateEngine templateEngine;
 	
 	@Autowired
-	private JavaMailSender mailSender;
+	private JavaMailSender javaMailSender;
 	
 	@Override
 	public void sendOrderConfirmationEmail(PurchaseOrder order) {
@@ -35,7 +36,7 @@ public abstract class AbstractEmailService implements EmailService{
 	protected SimpleMailMessage prepareSimpleMailFromOrder(PurchaseOrder order) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(order.getClient().getEmail());
-		message.setFrom(order.getClient().getEmail());		
+		message.setFrom(sender);		
 		message.setSubject("Confirmed Order! Code: " + order.getId());
 		message.setSentDate(new Date(System.currentTimeMillis()));
 		message.setText(order.toString());
@@ -53,19 +54,20 @@ public abstract class AbstractEmailService implements EmailService{
 	@Override
 	public void sendOrderConfirmationHtmlEmail(PurchaseOrder order) {		
 		try {
-			MimeMessage message = prepareMimeFromOrder(order);
+			MimeMessage message = prepareMimeMessageFromOrder(order);
 			sendHtmlEmail(message);
 		} catch (MessagingException e) {
 			sendOrderConfirmationEmail(order);
 		}
 	}
 
-	protected MimeMessage prepareMimeFromOrder(PurchaseOrder order) throws MessagingException {
-		MimeMessage mimeMessage = mailSender.createMimeMessage();
+	protected MimeMessage prepareMimeMessageFromOrder(PurchaseOrder order) throws MessagingException {
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 		helper.setTo(order.getClient().getEmail());
 		helper.setFrom(sender);
 		helper.setSubject("Order Confirmed! Code: " + order.getId());
+		helper.setSentDate(new Date(System.currentTimeMillis()));
 		helper.setText(htmlFromTemplateOrder(order), true);
 		
 		return mimeMessage;
