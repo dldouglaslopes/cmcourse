@@ -29,6 +29,9 @@ public class ClientNewDTO  implements Serializable{
 	private Integer type;
 	
 	@NotEmpty(message = "Compulsory Filling")
+	private String password;
+	
+	@NotEmpty(message = "Compulsory Filling")
 	private String patio;
 	
 	@NotEmpty(message = "Compulsory Filling")
@@ -87,6 +90,14 @@ public class ClientNewDTO  implements Serializable{
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getPatio() {
