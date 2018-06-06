@@ -117,14 +117,14 @@ public class DBService {
 
 		Client clientB = new Client(null, "Ana Costa", "dldouglaslopes@yahoo.com", "31628382740", TypeClient.PRIVATEINDIVIDUAL, encoder.encode("123"));
 		clientB.addProfile(Profile.ADMIN);
-		clientA.getPhones().addAll(Arrays.asList("45641111", "54564333"));
+		clientB.getPhones().addAll(Arrays.asList("45641111", "54564333"));
 		
 		Address addressA = new Address(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", clientA, cityA);
 		Address addressB = new Address(null, "Avenida Matos", "105", "Sala 800", "Centro", "38278834", clientA, cityB);
 		Address addressC = new Address(null, "Avenida Floriano", "2106", null, "Centro", "38254834", clientB, cityB);
 		
 		clientA.getAddresses().addAll(Arrays.asList(addressA, addressB));
-		clientA.getAddresses().addAll(Arrays.asList(addressC));
+		clientB.getAddresses().addAll(Arrays.asList(addressC));
 		
 		clientRepository.saveAll(Arrays.asList(clientA, clientB));
 		addressRepository.saveAll(Arrays.asList(addressA, addressB, addressC));
