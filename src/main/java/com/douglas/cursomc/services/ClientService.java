@@ -16,11 +16,14 @@ import org.springframework.stereotype.Service;
 import com.douglas.cursomc.domain.Address;
 import com.douglas.cursomc.domain.City;
 import com.douglas.cursomc.domain.Client;
+import com.douglas.cursomc.domain.enums.Profile;
 import com.douglas.cursomc.domain.enums.TypeClient;
 import com.douglas.cursomc.dto.ClientDTO;
 import com.douglas.cursomc.dto.ClientNewDTO;
 import com.douglas.cursomc.repositories.AddressRepository;
 import com.douglas.cursomc.repositories.ClientRepository;
+import com.douglas.cursomc.security.UserSS;
+import com.douglas.cursomc.services.exceptions.AuthorizationException;
 import com.douglas.cursomc.services.exceptions.DataIntegrityException;
 import com.douglas.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -37,6 +40,12 @@ public class ClientService {
 	private AddressRepository addressRepository;
 	
 	public Client find (Integer id) {
+		UserSS user = UserService.authenticated();
+		
+		if (user == null || !user.hasRole(Profile.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Access denied");
+		}
+		
 		Optional<Client> client = repository.findById(id);
 		
 		return client.orElseThrow(() -> new ObjectNotFoundException("Object not found! Id: " + id + ", Tipo: " + Client.class.getName()));		
