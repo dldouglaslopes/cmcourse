@@ -4,6 +4,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.SimpleMailMessage;
 
+import com.douglas.cursomc.domain.Client;
 import com.douglas.cursomc.domain.PurchaseOrder;
 
 public interface EmailService {
@@ -12,4 +13,5 @@ public interface EmailService {
 	void sendEmail(SimpleMailMessage message);
 	void sendOrderConfirmationHtmlEmail(PurchaseOrder order);
 	void sendHtmlEmail(MimeMessage message);
+	void sendNewPasswordEmail(Client client, String newPwd);
 }
