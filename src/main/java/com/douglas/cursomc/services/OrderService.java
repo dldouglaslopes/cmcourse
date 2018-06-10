@@ -6,8 +6,12 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.douglas.cursomc.domain.Client;
 import com.douglas.cursomc.domain.ItemOrder;
 import com.douglas.cursomc.domain.PaymentBill;
 import com.douglas.cursomc.domain.PurchaseOrder;
@@ -15,6 +19,8 @@ import com.douglas.cursomc.domain.enums.PaymentStatus;
 import com.douglas.cursomc.repositories.ItemOrderRepository;
 import com.douglas.cursomc.repositories.OrderRepository;
 import com.douglas.cursomc.repositories.PaymentRepository;
+import com.douglas.cursomc.security.UserSS;
+import com.douglas.cursomc.services.exceptions.AuthorizationException;
 import com.douglas.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -73,5 +79,18 @@ public class OrderService {
 		emailService.sendOrderConfirmationHtmlEmail(order);
 		
 		return order;
+	}
+	
+	public Page<PurchaseOrder> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+		
+		if (user == null) {
+			throw new AuthorizationException("Access denied");
+		}
+		
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Client client = clientService.find(user.getId());
+		
+		return repository.findByClient(client, pageRequest);
 	}
 }
