@@ -81,6 +81,22 @@ public class ClientService {
 		return repository.findAll();
 	}
 	
+	public Client findByEmail(String email) {
+		UserSS userSS = UserService.authenticated();
+		
+		if (userSS == null || !userSS.hasRole(Profile.ADMIN) && !email.equals(userSS.getUsername())) {
+			throw new AuthorizationException("Access denied");
+		}
+		
+		Client client = repository.findByEmail(email);
+		
+		if (client == null) {
+			throw new ObjectNotFoundException("Object not found! Id:" + userSS.getId() + ", Type: " + Client.class.getName());
+		}
+		
+		return client;
+	}
+	
 	public Page<Client> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		
