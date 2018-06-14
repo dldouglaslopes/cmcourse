@@ -115,9 +115,11 @@ public class DBService {
 		Product p48 = new Product(null, "Product 48", 10.00);
 		Product p49 = new Product(null, "Product 49", 10.00);
 		Product p50 = new Product(null, "Product 50", 10.00);
+		
 		category1.getProducts().addAll(Arrays.asList(p12, p13, p14, p15, p16, p17, p18, p19, p20,
 		p21, p22, p23, p24, p25, p26, p27, p28, p29, p30, p31, p32, p34, p35, p36, p37, p38,
 		p39, p40, p41, p42, p43, p44, p45, p46, p47, p48, p49, p50));
+		
 		p12.getCategories().add(category1);
 		p13.getCategories().add(category1);
 		p14.getCategories().add(category1);
@@ -183,6 +185,7 @@ public class DBService {
 		productRepository.saveAll(Arrays.asList(p12, p13, p14, p15, p16, p17, p18, p19, p20,
 				p21, p22, p23, p24, p25, p26, p27, p28, p29, p30, p31, p32, p34, p35, p36, p37, p38,
 				p39, p40, p41, p42, p43, p44, p45, p46, p47, p48, p49, p50));
+		
 		State stateA = new State(null, "Minas Gerais");
 		State stateB = new State(null, "São Paulo");
 		
